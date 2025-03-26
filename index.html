@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvolvEd - Open Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID"></script>
+</head>
+<body class="bg-Purple and lightPink-100 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-white p-4 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-blue-600">EvolvEd</h1>
+            <div>
+                <a href="#" class="mx-4 hover:text-blue-500">Home</a>
+                <a href="#courses" class="mx-4 hover:text-blue-500">Courses</a>
+                <a href="#dashboard" class="mx-4 hover:text-blue-500">Dashboard</a>
+                <a href="#liveClass" class="mx-4 hover:text-blue-500">Live Classes</a>
+                <a href="#quizzes" class="mx-4 hover:text-blue-500">Quizzes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Newly Designed with Image) -->
+    <header class="relative w-full h-[70vh]">
+        <img src="https://source.unsplash.com/1600x900/?education,learning" alt="Learning" class="w-full h-full object-cover">
+        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex flex-col items-center justify-center text-white text-center">
+            <h1 class="text-5xl font-bold">Welcome to EvolvEd</h1>
+            <p class="text-lg mt-2">Empowering Learning, One Click at a Time</p>
+            <a href="#courses" class="mt-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 text-lg font-semibold rounded">Explore Courses</a>
+        </div>
+    </header>
+
+    <!-- Courses Page -->
+    <section id="courses" class="max-w-6xl mx-auto py-12">
+        <h2 class="text-3xl font-semibold text-center mb-6">Popular Courses</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-chemistry.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Chemistry</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-biology.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Biology</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-physics.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Physics</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-maths.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Mathematics</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-medicine.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Medicine</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-4">
+                <img src="/path-to-ai-generated-surgery.jpg" class="rounded w-full">
+                <h3 class="text-lg font-bold mt-2">Surgery</h3>
+                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Enroll</button>
+            </div>
+            </div>
+
+    <!-- Live Class Section -->
+    <section id="liveClass" class="text-center py-12 bg-gray-100">
+        <h2 class="text-3xl font-semibold">Live Classes</h2>
+        <video id="liveVideo" autoplay playsinline class="border rounded-lg w-full max-w-2xl mx-auto"></video>
+        <button id="startStream" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Start Live Class</button>
+    </section>
+
+    <!-- AI Chatbot -->
+    <div class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg">
+        <h3 class="text-lg">Ask EvolvEd AI 🤖</h3>
+        <input id="userInput" type="text" class="w-full p-2 mt-2 rounded text-gray-900" placeholder="Ask a question...">
+        <button onclick="getAIResponse()" class="mt-2 bg-white text-blue-500 px-4 py-1 rounded">Send</button>
+        <p id="response" class="mt-2 text-sm"></p>
+    </div>
+
+    <script>
+        // Live Class Streaming
+        document.getElementById("startStream").addEventListener("click", async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById("liveVideo").srcObject = stream;
+            } catch (error) {
+                alert("Error starting live class: " + error.message);
+            }
+        });
+
+        // AI Chatbot
+        async function getAIResponse() {
+            const question = document.getElementById("userInput").value;
+            const responseElement = document.getElementById("response");
+
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [{ role: "system", content: "You are a learning assistant." }, { role: "user", content: question }]
+                })
+            });
+
+            const data = await response.json();
+            responseElement.innerText = data.choices[0].message.content;
+        }
+    </script>
+
+</body>
+</html>
